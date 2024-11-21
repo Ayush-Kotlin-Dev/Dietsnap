@@ -26,12 +26,15 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,10 +42,43 @@ import androidx.compose.ui.unit.sp
 import com.ayush.dietsnap.R
 import com.ayush.dietsnap.domain.model.HomePage
 import com.ayush.dietsnap.presentation.components.BottomNavigation
+import com.ayush.dietsnap.presentation.components.ErrorScreen
+import com.ayush.dietsnap.presentation.components.LoadingScreen
 import com.ayush.dietsnap.presentation.components.TopBar
+import com.ayush.dietsnap.presentation.components.toString
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(homeData: HomePage, onFindDietsClick: () -> Unit , onFindNutritionistClick: () -> Unit) {
+fun HomeScreen(
+    onGoalWorkoutClick : () -> Unit,
+    onFindDietsClick: () -> Unit,
+    onFindNutritionistClick: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    when (val state = uiState) {
+        is HomeUiState.Loading -> LoadingScreen()
+        is HomeUiState.Error -> ErrorScreen(state.error.toString(context)) {
+            viewModel.fetchHomePageData()
+        }
+        is HomeUiState.Success -> HomeContent(
+            homeData = state.data,
+            onGoalWorkoutClick = onGoalWorkoutClick,
+            onFindDietsClick = onFindDietsClick,
+            onFindNutritionistClick = onFindNutritionistClick
+        )
+    }
+}
+
+@Composable
+fun HomeContent(
+    homeData: HomePage,
+    onGoalWorkoutClick: () -> Unit,
+    onFindDietsClick: () -> Unit,
+    onFindNutritionistClick: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -60,9 +96,9 @@ fun HomeScreen(homeData: HomePage, onFindDietsClick: () -> Unit , onFindNutritio
                 item { Spacer(modifier = Modifier.height(24.dp)) }
                 item { CircularProgressSection() }
                 item { Spacer(modifier = Modifier.height(24.dp)) }
-                item { AdditionalPointsSection(homeData) }
+                item { AdditionalPointsSection() }
                 item { Spacer(modifier = Modifier.height(24.dp)) }
-                item { YourGoalsSection(homeData) }
+                item { YourGoalsSection(homeData , onGoalWorkoutClick) }
                 item { Spacer(modifier = Modifier.height(24.dp)) }
                 item { ExploreSection(onFindDietsClick, onFindNutritionistClick) }
                 item { Spacer(modifier = Modifier.height(80.dp)) }
@@ -75,7 +111,6 @@ fun HomeScreen(homeData: HomePage, onFindDietsClick: () -> Unit , onFindNutritio
         )
     }
 }
-
 
 @Composable
 fun TodaySection() {
@@ -215,7 +250,7 @@ fun ProgressLabel(icon: Int, label: String, color: Color) {
 }
 
 @Composable
-fun AdditionalPointsSection(homeData: HomePage) {
+fun AdditionalPointsSection() {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -279,7 +314,7 @@ fun AdditionalPointItem(
 }
 
 @Composable
-fun YourGoalsSection(homeData: HomePage) {
+fun YourGoalsSection(homeData: HomePage, onGoalWorkoutClick: () -> Unit) {
     Text(
         text = "Your Goals",
         fontSize = 20.sp,
@@ -288,7 +323,9 @@ fun YourGoalsSection(homeData: HomePage) {
     )
     Spacer(modifier = Modifier.height(8.dp))
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable {
+            onGoalWorkoutClick()
+        },
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Gray.copy(0.1f)) // Set the card background to white
 

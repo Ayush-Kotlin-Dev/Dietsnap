@@ -1,4 +1,4 @@
-package com.ayush.dietsnap.presentation.screens
+package com.ayush.dietsnap.presentation.screens.workout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,7 +51,7 @@ import org.koin.androidx.compose.koinViewModel
 // so a separate screen was created for this purpose.
 
 @Composable
-fun DataScreen(
+fun WorkoutScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
