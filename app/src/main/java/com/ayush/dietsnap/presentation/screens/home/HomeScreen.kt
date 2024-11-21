@@ -29,6 +29,8 @@ import com.ayush.dietsnap.domain.model.ExerciseCategory
 import com.ayush.dietsnap.domain.model.HomePage
 import com.ayush.dietsnap.domain.model.RecommendedPlan
 import com.ayush.dietsnap.domain.model.WorkoutSummary
+import com.ayush.dietsnap.presentation.components.ErrorScreen
+import com.ayush.dietsnap.presentation.components.LoadingScreen
 import com.ayush.dietsnap.presentation.components.toString
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,27 +52,7 @@ fun HomePage(
     }
 }
 
-@Composable
-fun LoadingScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
-    }
-}
 
-@Composable
-fun ErrorScreen(errorMessage: String, onRetry: () -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = errorMessage)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onRetry) {
-            Text("Retry")
-        }
-    }
-}
 
 @Composable
 fun HomeContent(data: HomePage, modifier: Modifier = Modifier) {

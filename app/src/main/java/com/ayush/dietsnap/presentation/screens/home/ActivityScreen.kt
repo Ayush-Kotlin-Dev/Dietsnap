@@ -1,4 +1,4 @@
-package com.ayush.dietsnap.presentation.screens.home1
+package com.ayush.dietsnap.presentation.screens.home
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
