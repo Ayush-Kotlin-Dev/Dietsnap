@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.ayush.dietsnap.R
 import com.ayush.dietsnap.domain.model.HomePage
 import com.ayush.dietsnap.presentation.components.BottomNavigation
+import com.ayush.dietsnap.presentation.components.TopBar
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -78,43 +79,6 @@ fun HomeScreen(homeData: HomePage, onFindDietsClick: () -> Unit , onFindNutritio
     }
 }
 
-@Composable
-fun TopBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Dietsnap",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFFFA500)
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_bell),
-                contentDescription = "Notifications",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_award),
-                contentDescription = "Bookmarks",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_message),
-                contentDescription = "Menu",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
 
 @Composable
 fun TodaySection() {
@@ -135,7 +99,6 @@ fun TodaySection() {
         )
     }
 }
-
 @Composable
 fun CircularProgressSection() {
     Column(
@@ -143,9 +106,11 @@ fun CircularProgressSection() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Spacer(modifier = Modifier.width(24.dp))
             Box(
                 modifier = Modifier.size(200.dp),
                 contentAlignment = Alignment.Center
@@ -228,7 +193,6 @@ fun CircularProgressSection() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(16.dp))
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Set Goal",
