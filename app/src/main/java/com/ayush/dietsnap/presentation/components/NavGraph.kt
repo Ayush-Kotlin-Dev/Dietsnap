@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ayush.dietsnap.presentation.screens.DataScreen
 import com.ayush.dietsnap.presentation.screens.food_info.FoodInfoScreen
 import com.ayush.dietsnap.presentation.screens.home.HomeScreen
 import com.ayush.dietsnap.presentation.screens.home.HomeUiState
@@ -28,14 +29,17 @@ fun AppNavigation() {
                 is HomeUiState.Error -> ErrorScreen(state.error.toString(context)) {
                     viewModel.fetchHomePageData()
                 }
-                is HomeUiState.Success -> HomeScreen(
-                    homeData = state.data,
-                    onFindDietsClick = {
-                        navController.navigate("foodInfo")
-                    },
-                    onFindNutritionistClick = {
-                        Toast.makeText(context, "Find Nutritionist Clicked", Toast.LENGTH_SHORT).show()
-                    }
+//                is HomeUiState.Success -> HomeScreen(
+//                    homeData = state.data,
+//                    onFindDietsClick = {
+//                        navController.navigate("foodInfo")
+//                    },
+//                    onFindNutritionistClick = {
+//                        Toast.makeText(context, "Find Nutritionist Clicked", Toast.LENGTH_SHORT).show()
+//                    }
+//                )
+                is HomeUiState.Success -> DataScreen(
+                    viewModel = viewModel
                 )
             }
         }

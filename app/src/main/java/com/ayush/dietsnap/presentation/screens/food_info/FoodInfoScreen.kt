@@ -315,7 +315,7 @@ fun FactsSection(facts: List<String>) {
     // Auto-scroll effect
     LaunchedEffect(Unit) {
         while (true) {
-            delay(2000)
+            delay(5000)
             val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
             pagerState.animateScrollToPage(nextPage)
         }

@@ -1,4 +1,4 @@
-package com.ayush.dietsnap.data
+package com.ayush.dietsnap.data.mapper
 
 import com.ayush.dietsnap.data.model.FoodInfoDataModel
 import com.ayush.dietsnap.data.model.IngredientDataModel

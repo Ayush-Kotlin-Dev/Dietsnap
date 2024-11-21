@@ -6,7 +6,7 @@ import com.ayush.dietsnap.data.networking.responseToResult
 import com.ayush.dietsnap.data.networking.util.NetworkError
 import com.ayush.dietsnap.data.networking.util.Result
 import com.ayush.dietsnap.data.networking.util.map
-import com.ayush.dietsnap.data.toDomainModel
+import com.ayush.dietsnap.data.mapper.toDomainModel
 import com.ayush.dietsnap.domain.model.FoodInfo
 import com.ayush.dietsnap.domain.repository.FoodInfoRepository
 import io.ktor.client.HttpClient
