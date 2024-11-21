@@ -1,5 +1,6 @@
 package com.ayush.dietsnap.presentation.screens.food_info
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,9 +25,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,6 +56,7 @@ import com.ayush.dietsnap.domain.model.SimilarItem
 import com.ayush.dietsnap.presentation.components.ErrorScreen
 import com.ayush.dietsnap.presentation.components.LoadingScreen
 import com.ayush.dietsnap.presentation.components.toString
+import kotlinx.coroutines.delay
 
 @Composable
 fun FoodInfoScreen(viewModel: FoodInfoViewModel) {
@@ -72,12 +78,16 @@ fun FoodInfoScreen(viewModel: FoodInfoViewModel) {
 
 @Composable
 fun FoodInfoContent(foodInfo: FoodInfo) {
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item {
-            FoodHeader(foodInfo)
+            FoodHeader(foodInfo) {
+                Toast.makeText(context, "Back clicked", Toast.LENGTH_SHORT).show()
+            }
         }
         item {
             ContentSection(
@@ -115,7 +125,7 @@ fun FoodInfoContent(foodInfo: FoodInfo) {
 }
 
 @Composable
-fun FoodHeader(foodInfo: FoodInfo) {
+fun FoodHeader(foodInfo: FoodInfo, onBackClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,6 +150,33 @@ fun FoodHeader(foodInfo: FoodInfo) {
                     )
                 )
         )
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(Color.Black.copy(alpha = 0.4f), CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Back",
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -159,10 +196,10 @@ fun FoodHeader(foodInfo: FoodInfo) {
         }
         Box(
             modifier = Modifier
-                .align(Alignment.TopEnd)
+                .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .size(64.dp)
-                .background(Color(0x8B8B8BA6).copy(alpha = 0.4f), shape = RoundedCornerShape(8.dp))
+                .background(Color(0x8B8B8BA6).copy(alpha = 0.3f), shape = RoundedCornerShape(8.dp))
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -184,7 +221,6 @@ fun FoodHeader(foodInfo: FoodInfo) {
         }
     }
 }
-
 @Composable
 fun ContentSection(title: String, content: @Composable () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
@@ -266,17 +302,25 @@ fun NutritionTable(nutritionInfo: List<NutritionInfo>) {
             }
         }
     }
+
 }
 
 // Helper function to round doubles to a specific number of decimal places
 fun Double.roundToDecimal(decimals: Int): String {
     return "%.${decimals}f".format(this)
 }
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FactsSection(facts: List<String>) {
     val pagerState = rememberPagerState { facts.size }
+
+    // Auto-scroll effect
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000)
+            val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         HorizontalPager(
@@ -295,8 +339,7 @@ fun FactsSection(facts: List<String>) {
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(pagerState.pageCount) { iteration ->
-                val color =
-                    if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                 Box(
                     modifier = Modifier
                         .padding(2.dp)
@@ -313,8 +356,7 @@ fun FactsSection(facts: List<String>) {
 fun FactCard(fact: String) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFFC107).copy(alpha = 0.5f)),
     ) {
         Column(
@@ -327,7 +369,7 @@ fun FactCard(fact: String) {
                 text = "Did you know?",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.White
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -343,7 +385,7 @@ fun FactCard(fact: String) {
 fun SimilarItemsGrid(items: List<SimilarItem>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        contentPadding = PaddingValues(horizontal = 4.dp)
     ) {
         items(items) { item ->
             SimilarItemCard(item)
@@ -360,7 +402,7 @@ fun SimilarItemCard(item: SimilarItem) {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                painter = rememberImagePainter(item.image),
+                painter = rememberAsyncImagePainter(getImageUrl(item.image)),
                 contentDescription = item.name,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -368,7 +410,7 @@ fun SimilarItemCard(item: SimilarItem) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.6f))
+                    .background(Color.Black.copy(alpha = 0.2f))
             )
             Text(
                 text = item.name,
@@ -379,5 +421,14 @@ fun SimilarItemCard(item: SimilarItem) {
                     .padding(8.dp)
             )
         }
+    }
+}
+// Helper function to get image URL based on image name because the image URLs are not provided in the API response
+fun getImageUrl(imageName: String): String {
+    return when (imageName) {
+        "veg_biryani.png" -> "https://firebasestorage.googleapis.com/v0/b/geeksforgeeks-98cf0.appspot.com/o/VegBiryani.jpg?alt=media&token=31c5af54-feea-4abf-b927-ca3653b75462"
+        "paneer_biryani.png" -> "https://firebasestorage.googleapis.com/v0/b/geeksforgeeks-98cf0.appspot.com/o/paneer-biryani_-9.jpg?alt=media&token=aeaf79ef-e331-4b00-b231-f059a814b517"
+        "mutton_biryani.png" -> "https://firebasestorage.googleapis.com/v0/b/geeksforgeeks-98cf0.appspot.com/o/MuttonBiryani.jpg?alt=media&token=6f65036c-00c8-4f2e-a064-b6e8f60716bb"
+        else -> "" // You might want to provide a default image URL here
     }
 }
