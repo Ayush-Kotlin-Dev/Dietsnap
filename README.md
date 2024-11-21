@@ -22,7 +22,7 @@ Dietsnap is a modern Android application built with Jetpack Compose, focusing on
 ## API Integration
 
 The app fetches data from two main endpoints:
-- Homepage: `http://52.25.229.242:8000/homepage_v3/`
+- Homepage: `http://52.25.229.242:8000/homepage_v2/`
 - Food Info: `http://52.25.229.242:8000/food_info/`
 
 ## Screens
