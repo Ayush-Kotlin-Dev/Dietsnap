@@ -49,7 +49,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.ayush.dietsnap.domain.model.FoodInfo
 import com.ayush.dietsnap.domain.model.NutritionInfo
 import com.ayush.dietsnap.domain.model.SimilarItem
@@ -57,9 +56,10 @@ import com.ayush.dietsnap.presentation.components.ErrorScreen
 import com.ayush.dietsnap.presentation.components.LoadingScreen
 import com.ayush.dietsnap.presentation.components.toString
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun FoodInfoScreen(viewModel: FoodInfoViewModel) {
+fun FoodInfoScreen(viewModel: FoodInfoViewModel = koinViewModel(), onBackClick: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {
@@ -69,15 +69,14 @@ fun FoodInfoScreen(viewModel: FoodInfoViewModel) {
     val context = LocalContext.current
     when (val state = uiState) {
         is FoodInfoUiState.Loading -> LoadingScreen()
-        is FoodInfoUiState.Success -> FoodInfoContent(state.foodInfo)
+        is FoodInfoUiState.Success -> FoodInfoContent(state.foodInfo, onBackClick)
         is FoodInfoUiState.Error -> ErrorScreen(state.error.toString(context)) {
             viewModel.loadFoodInfo()
         }
     }
 }
-
 @Composable
-fun FoodInfoContent(foodInfo: FoodInfo) {
+fun FoodInfoContent(foodInfo: FoodInfo, onBackClick: () -> Unit) {
     val context = LocalContext.current
 
     LazyColumn(
@@ -86,7 +85,7 @@ fun FoodInfoContent(foodInfo: FoodInfo) {
     ) {
         item {
             FoodHeader(foodInfo) {
-                Toast.makeText(context, "Back clicked", Toast.LENGTH_SHORT).show()
+                onBackClick()
             }
         }
         item {
