@@ -123,65 +123,44 @@ fun CircularProgressSection() {
                     val innerRadius = outerRadius - 30f
 
                     // Outer circle background
-                    drawArc(
+                    drawCircle(
                         color = Color(0xFFFFE4B5),
-                        startAngle = -90f,
-                        sweepAngle = 360f,
-                        useCenter = false,
+                        radius = outerRadius,
                         style = Stroke(width = strokeWidth)
                     )
 
                     // Inner circle background
-                    drawArc(
+                    drawCircle(
                         color = Color(0xFFF0E0FF),
-                        startAngle = -90f,
-                        sweepAngle = 360f,
-                        useCenter = false,
-                        style = Stroke(width = strokeWidth),
-                        size = Size(size.width - 60f, size.height - 60f),
-                        topLeft = Offset(30f, 30f)
-                    )
-
-                    // Outer arc progress
-                    drawArc(
-                        color = Color(0xFFFFAA00),
-                        startAngle = -90f,
-                        sweepAngle = 300f,
-                        useCenter = false,
+                        radius = innerRadius,
                         style = Stroke(width = strokeWidth)
                     )
 
-                    // Inner arc progress
-                    drawArc(
-                        color = Color(0xFFE6A8D7),
-                        startAngle = -90f,
-                        sweepAngle = 240f,
-                        useCenter = false,
-                        style = Stroke(width = strokeWidth),
-                        size = Size(size.width - 60f, size.height - 60f),
-                        topLeft = Offset(30f, 30f)
+                    // Outer arc progress (full circle for now)
+                    drawCircle(
+                        color = Color(0xFFFFAA00),
+                        radius = outerRadius,
+                        style = Stroke(width = strokeWidth)
                     )
 
-                    // Small circles at the end of each arc
-                    val outerAngle = 300f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
-                    val innerAngle = 240f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
+                    // Inner arc progress (full circle for now)
+                    drawCircle(
+                        color = Color(0xFFE6A8D7),
+                        radius = innerRadius,
+                        style = Stroke(width = strokeWidth)
+                    )
 
+                    // Small circles at the top of each arc
                     drawCircle(
                         color = Color(0xFFFFAA00),
                         radius = 10f,
-                        center = Offset(
-                            centerX + cos(outerAngle) * outerRadius,
-                            centerY + sin(outerAngle) * outerRadius
-                        )
+                        center = Offset(centerX, centerY - outerRadius)
                     )
 
                     drawCircle(
                         color = Color(0xFFE6A8D7),
                         radius = 10f,
-                        center = Offset(
-                            centerX + cos(innerAngle) * innerRadius,
-                            centerY + sin(innerAngle) * innerRadius
-                        )
+                        center = Offset(centerX, centerY - innerRadius)
                     )
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
