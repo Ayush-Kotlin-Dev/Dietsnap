@@ -19,18 +19,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +31,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -146,110 +137,121 @@ fun TodaySection() {
 
 @Composable
 fun CircularProgressSection() {
-    Box(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Canvas(modifier = Modifier.size(200.dp)) {
-            val strokeWidth = 20f
-            val centerX = size.width / 2
-            val centerY = size.height / 2
-            val outerRadius = (size.minDimension - strokeWidth) / 2
-            val innerRadius = outerRadius - 30f
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier.size(200.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(modifier = Modifier.size(200.dp)) {
+                    val strokeWidth = 20f
+                    val centerX = size.width / 2
+                    val centerY = size.height / 2
+                    val outerRadius = (size.minDimension - strokeWidth) / 2
+                    val innerRadius = outerRadius - 30f
 
-            // Outer circle background
-            drawArc(
-                color = Color(0xFFFFE4B5),
-                startAngle = -90f,
-                sweepAngle = 360f,
-                useCenter = false,
-                style = Stroke(width = strokeWidth)
-            )
+                    // Outer circle background
+                    drawArc(
+                        color = Color(0xFFFFE4B5),
+                        startAngle = -90f,
+                        sweepAngle = 360f,
+                        useCenter = false,
+                        style = Stroke(width = strokeWidth)
+                    )
 
-            // Inner circle background
-            drawArc(
-                color = Color(0xFFF0E0FF),
-                startAngle = -90f,
-                sweepAngle = 360f,
-                useCenter = false,
-                style = Stroke(width = strokeWidth),
-                size = Size(size.width - 60f, size.height - 60f),
-                topLeft = Offset(30f, 30f)
-            )
+                    // Inner circle background
+                    drawArc(
+                        color = Color(0xFFF0E0FF),
+                        startAngle = -90f,
+                        sweepAngle = 360f,
+                        useCenter = false,
+                        style = Stroke(width = strokeWidth),
+                        size = Size(size.width - 60f, size.height - 60f),
+                        topLeft = Offset(30f, 30f)
+                    )
 
-            // Outer arc progress
-            drawArc(
-                color = Color(0xFFFFAA00),
-                startAngle = -90f,
-                sweepAngle = 300f,
-                useCenter = false,
-                style = Stroke(width = strokeWidth)
-            )
+                    // Outer arc progress
+                    drawArc(
+                        color = Color(0xFFFFAA00),
+                        startAngle = -90f,
+                        sweepAngle = 300f,
+                        useCenter = false,
+                        style = Stroke(width = strokeWidth)
+                    )
 
-            // Inner arc progress
-            drawArc(
-                color = Color(0xFFE6A8D7),
-                startAngle = -90f,
-                sweepAngle = 240f,
-                useCenter = false,
-                style = Stroke(width = strokeWidth),
-                size = Size(size.width - 60f, size.height - 60f),
-                topLeft = Offset(30f, 30f)
-            )
+                    // Inner arc progress
+                    drawArc(
+                        color = Color(0xFFE6A8D7),
+                        startAngle = -90f,
+                        sweepAngle = 240f,
+                        useCenter = false,
+                        style = Stroke(width = strokeWidth),
+                        size = Size(size.width - 60f, size.height - 60f),
+                        topLeft = Offset(30f, 30f)
+                    )
 
-            // Small circles at the end of each arc
-            val outerAngle = 300f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
-            val innerAngle = 240f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
+                    // Small circles at the end of each arc
+                    val outerAngle = 300f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
+                    val innerAngle = 240f * Math.PI.toFloat() / 180f - Math.PI.toFloat() / 2f
 
-            drawCircle(
-                color = Color(0xFFFFAA00),
-                radius = 10f,
-                center = Offset(
-                    centerX + cos(outerAngle) * outerRadius,
-                    centerY + sin(outerAngle) * outerRadius
-                )
-            )
+                    drawCircle(
+                        color = Color(0xFFFFAA00),
+                        radius = 10f,
+                        center = Offset(
+                            centerX + cos(outerAngle) * outerRadius,
+                            centerY + sin(outerAngle) * outerRadius
+                        )
+                    )
 
-            drawCircle(
-                color = Color(0xFFE6A8D7),
-                radius = 10f,
-                center = Offset(
-                    centerX + cos(innerAngle) * innerRadius,
-                    centerY + sin(innerAngle) * innerRadius
-                )
-            )
-        }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "SET GOAL!",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
+                    drawCircle(
+                        color = Color(0xFFE6A8D7),
+                        radius = 10f,
+                        center = Offset(
+                            centerX + cos(innerAngle) * innerRadius,
+                            centerY + sin(innerAngle) * innerRadius
+                        )
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "SET GOAL!",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(16.dp))
             Icon(
-                Icons.Default.ArrowForward,
+                imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Set Goal",
                 tint = Color(0xFFFFA500),
                 modifier = Modifier.size(24.dp)
             )
         }
-    }
-    Spacer(modifier = Modifier.height(16.dp))
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        ProgressLabel(
-            icon = R.drawable.ic_diet_pts,
-            label = "Diet Pts",
-            color = Color(0xFFFFAA00)
-        )
-        Spacer(modifier = Modifier.width(24.dp))
-        ProgressLabel(
-            icon = R.drawable.ic_exercise,
-            label = "Exercise Pts",
-            color = Color(0xFFE6A8D7)
-        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ProgressLabel(
+                icon = R.drawable.ic_diet_pts,
+                label = "Diet Pts",
+                color = Color(0xFFFFAA00)
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            ProgressLabel(
+                icon = R.drawable.ic_exercise,
+                label = "Exercise Pts",
+                color = Color(0xFFE6A8D7)
+            )
+        }
     }
 }
 
@@ -270,6 +272,7 @@ fun ProgressLabel(icon: Int, label: String, color: Color) {
         )
     }
 }
+
 @Composable
 fun AdditionalPointsSection(homeData: HomePage) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -333,6 +336,7 @@ fun AdditionalPointItem(
         )
     }
 }
+
 @Composable
 fun YourGoalsSection(homeData: HomePage) {
     Text(
